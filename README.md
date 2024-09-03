@@ -23,7 +23,7 @@ Before you begin, ensure you have the following installed:
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/yourusername/FocusPlanner.git
+   git clone https://github.com/Crific/FocusPlanner.git
    
 2. **Open the Project in Your IDE:**
    - Import the project into your IDE (e.g., IntelliJ IDEA, Eclipse).
