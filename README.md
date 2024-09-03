@@ -55,8 +55,8 @@ Before you begin, ensure you have the following installed:
    - Start the Pomodoro timer from the GUI to manage your work sessions. The timer will help you work in focused intervals (typically 25 minutes), followed by short breaks.
 
 5. **Edit or Delete Entries:**
-   - (If you plan to add these features, mention how they can be accessed).
-
+   - Work in Progress
+6. **WIP**
 
 
 
