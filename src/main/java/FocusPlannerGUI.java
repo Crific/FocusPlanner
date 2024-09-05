@@ -7,7 +7,25 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ Potential future updates :
+ - Change UI
+ - Fix Calendar Entry System :
+    Short fixes:
+       - displays buttons with the entry dates
+       - shows real-time the description / notes made for that date
+       - remove entry button on top right
+       - edit entry button
+       - export list
 
+    Long term QOL fixes:
+        - full interactive calendar display with year selection
+
+  - add another program functionality:
+    - Notebooks
+        - categories to separate notebooks
+        - possible AI integration to help
+ */
 
 public class FocusPlannerGUI {
 
@@ -126,11 +144,32 @@ public class FocusPlannerGUI {
         }
     }
 
+    /*
+    TO DO:
+    - Pomodoro timer reset back to 25 minutes
+    - pop up that confirms the user if they want a short break
+    - goes to break with 5 minutes
+    - after 5 minutes prompts user if they want a long session (25 minutes) or short session (15 minutes) & closes the break tab
+
+    QOL future updates :
+    - real time switching between breaks and sessions instead of opening a new tab
+     */
+
     private void pomodoroTimer() {
         // Panel for Pomodoro timer
         JPanel pomodoroPanel = new JPanel();
         JLabel pomodoroLabel = new JLabel("00:25:00");
         pomodoroPanel.add(pomodoroLabel);
+
+        JButton breakButton = new JButton("Break");
+        JButton startButton = new JButton("Start");
+        JButton stopButton = new JButton("Stop");
+        pomodoroPanel.add(breakButton);
+        pomodoroPanel.add(startButton);
+        pomodoroPanel.add(stopButton);
+
+
+
 
         Timer timer = new Timer(1000, new ActionListener() {
             int seconds = 1500; // 25 minutes = 1500 seconds
@@ -144,15 +183,80 @@ public class FocusPlannerGUI {
                     int secs = seconds % 60;
                     pomodoroLabel.setText(String.format("%02d:%02d:%02d", hours, minutes, secs));
                 } else {
-                    ((Timer)e.getSource()).stop(); // Stop the timer when it reaches zero
+                    ((Timer) e.getSource()).stop(); // Stop the timer when it reaches zero
                     pomodoroLabel.setText("00:00:00"); // Optional: Display zero time
 
                 }
+
+            }
+
+        });
+
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                timer.start(); // Start the time
             }
         });
 
-        timer.start(); // Start the timer
+        stopButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                timer.stop(); // Stops the time
+            }
+        });
+
+        breakButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                breakTimer();
+            }
+        });
+
         JOptionPane.showMessageDialog(frame, pomodoroPanel, "Pomodoro Timer", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    public void breakTimer(){
+        JPanel breakPanel = new JPanel();
+        JLabel breakLabel = new JLabel("00:05:00");
+        JButton startBreakButton = new JButton("Start");
+        JButton stopBreakButton = new JButton("Stop");
+        breakPanel.add(breakLabel);
+        breakPanel.add(startBreakButton);
+        breakPanel.add(stopBreakButton);
+
+        Timer timer = new Timer(1000, new ActionListener() {
+            int seconds = 300; // 5 minutes = 300 seconds
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (seconds > 0) {
+                    seconds--; // Decrement the timer
+                    int hours = seconds / 3600;
+                    int minutes = (seconds % 3600) / 60;
+                    int secs = seconds % 60;
+                    breakLabel.setText(String.format("%02d:%02d:%02d", hours, minutes, secs));
+                } else {
+                    ((Timer) e.getSource()).stop(); // Stop the timer when it reaches zero
+                    breakLabel.setText("00:00:00"); // Optional: Display zero time
+
+                }
+
+            }
+
+        });
+
+        startBreakButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                timer.start(); // Start the time
+            }
+        });
+
+        stopBreakButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                timer.stop(); // Stops the time
+            }
+        });
+        JOptionPane.showMessageDialog(frame, breakPanel, "Pomodoro Timer", JOptionPane.PLAIN_MESSAGE);
     }
 
     public static void main(String[] args) {
