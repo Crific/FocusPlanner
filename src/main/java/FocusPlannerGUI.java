@@ -2,8 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+// import java.time.LocalDateTime;
+// import java.time.format.DateTimeFormatter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +35,8 @@ public class FocusPlannerGUI {
     private JFrame frame;
     private JTextArea entryDisplayArea;
     private List<Entry> entryList;
+    private JLabel timeLabel;  // Add timeLabel at the class level
+    private Timer timer;
 
     public FocusPlannerGUI() {
         entryList = new ArrayList<>();
@@ -43,7 +48,7 @@ public class FocusPlannerGUI {
 
         // Set up the menu panel
         JPanel menuPanel = new JPanel();
-        menuPanel.setLayout(new GridLayout(5, 1));
+        menuPanel.setLayout(new GridLayout(1, 6));
 
 
         JButton dateTimeButton = new JButton("Display Current Date & Time");
@@ -52,7 +57,7 @@ public class FocusPlannerGUI {
         JButton pomodoroTimerButton = new JButton("Pomodoro Timer");
         JButton exitButton = new JButton("Exit");
 
-        menuPanel.add(dateTimeButton);
+        // menuPanel.add(dateTimeButton);
         menuPanel.add(addEntryButton);
         menuPanel.add(printEntriesButton);
         menuPanel.add(pomodoroTimerButton);
@@ -67,13 +72,35 @@ public class FocusPlannerGUI {
         JScrollPane scrollPane = new JScrollPane(entryDisplayArea);
         frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
 
+        // Create a panel for the time display
+        JPanel timePanel = new JPanel();
+        timeLabel = new JLabel("Time: ");
+        timePanel.add(timeLabel);
+
+        // Add the time panel to the frame (at the bottom)
+        menuPanel.add(timePanel);
+
+        // Set up the timer for real-time clock
+        final DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        ActionListener timerListener = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Date date = new Date();
+                String time = timeFormat.format(date);
+                timeLabel.setText("Time: " + time);
+            }
+        };
+        timer = new Timer(1000, timerListener); // Update every second
+        timer.setInitialDelay(0); // Start immediately
+        timer.start();
+
         // Add action listeners for buttons
-        dateTimeButton.addActionListener(new ActionListener() {
+        /*dateTimeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 displayCurrentDateTime();
             }
         });
+         */
 
         addEntryButton.addActionListener(new ActionListener() {
             @Override
@@ -107,12 +134,15 @@ public class FocusPlannerGUI {
         frame.setVisible(true);
     }
 
+        /*
     private void displayCurrentDateTime() {
         LocalDateTime currentDateTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = currentDateTime.format(formatter);
         entryDisplayArea.append("Current Date and Time: " + formattedDateTime + "\n");
     }
+    */
+
 
     private void addCalendarEntry() {
         String day = JOptionPane.showInputDialog(frame, "Enter the day:");
